@@ -4,22 +4,26 @@
 1. What is cloud computing?
     - In 2013, Cloud computing is a jargon term without a commonly accepted non-ambiguous scientific or technical definition. (Anything that is not on your computer, e.g.: gmail)
     - In 2016, Proponents claim that cloud computing allows companies to avoid upfront infrastructure costs, and focus on projects that differentiate their businesses instead of on infrastructure. Proponents also claim that cloud computing allows enterprises to get their applications up and running faster, with improved manageability and less maintenance, and enables IT to more rapidly adjust resources to meet fluctuating and unpredictable business demand. Cloud providers typically use a "pay as you go" model. This can lead to unexpectedly high charges if administrators do not adapt to the cloud pricing model. (Everyone has different flavor)
+    - Key point:强大计算能力
+    - A variety of different types of computing concepts that involve a large number of computers that are connected through a real-time communication network.
+    - ...is the on-demand availability of computer system resources, especially data storage and computing power, without direct active management by the user(与Grid Computing的区别，用户导向，门槛低)
+    - “Pay As You Go” 即付即用，只要问到Cloud Computing都可以用到这个形容
 2. Cloud Characteristics (Lecture notes and then my paraphrasing)
-    - On-demand self-service
+    - On-demand self-service 即付即用，无需服务提供商干预
         - A consumer can provision computing capabilities as needed without requiring human   interaction with each service provider. 
         - Scale computing resources up and down by needs without requiring human interaction with each service provider.
         - For anyone in any time - infinite availability (key)
-    - Networked access
+    - Networked access 通过网络使用，适配多种客户端平台(heterogeneous)
         - Capabilities are available over the network and access through standard mechanisms that promote use by heterogeneous client platforms.
         - Resources can be access through network and adapted to heterogeneous client platforms.
-    - Resource pooling
+    - Resource pooling 多租户模型，资源池化便于监管，动态按需分配 (池化:利于资源重复利用，减少开销，利于维护)
         - The provider's computing resources are pooled to serve multiple consumers using a   multi-tenant model potentially with different physical and virtual resources that can be  dynamically assigned and reassigned according to consumer demand. 
         - Provider’s resources are pooled and can be dynamically assigned and reassigned by need.     
         - Enough resource to scale up & down
-    - Rapid Elasticity
+    - Rapid Elasticity 弹性扩展，快速调配(联想各大电商如何处理访问量激增)
         - Capabilities can be elastically provisioned and released, in some cases automatically, to scale rapidly upon  demand.
         - Capabilities can scale easily and rapidly upon demand.
-    - Measured Service
+    - Measured Service 自动计算、监视、控制、优化、报告资源使用情况
         - Cloud systems automatically control and optimize resource use by leveraging a metering  capability at some level of abstraction appropriate to the type of service.
         - Resourcing optimization by measuring usage
         - monitor for load balance (e.g.: nigix)
@@ -74,8 +78,11 @@
                 - Public key infrastructure
     - cloud(10s)
 5. Comparison between Grid/Cluster/Cloud Computing
+    - 计算资源的种类和数量上涨，用户类型（device）上涨
+    - Distributed Systems -> Grid Computing -> Cloud Computing
     - Grid computing
         - Grid is/was more loosely coupled resources that provided single sign-on access to distributed resources that are often hosted by different organisations
+        - reach a main objective. 专业人员（research only）管理，共同目的
     - Cluster Computing
         - Clusters tend to be tightly coupled, e.g. a bunch of servers in a rack with high speed interconnects
         - Example
@@ -83,6 +90,20 @@
     - Cloud Computing
         - Refer to week 5
         - Cloud computing is a model for enabling ubiquitous, convenient, on-demand network access to a shared pool of configurable computing resources(networks, servers, storage, applications, services) that can be rapidly provisioned and released with minimal management effort or service provider interaction.
+        - 概念拓宽泛化，用途广泛，可利用资源增多
+6. Distributed Systems面临的挑战
+    - Heterogeneity（环境异构）: software/hardware/network/programming languages不同 -> 部署问题 -> 间接影响scalability -> data heterogeneity（数据异构） -> 使用多个节点的计算资源，但（以pc为例，软硬件，环境协议都可能不同）
+    - Openness: difficulty to improve the system
+    - Concurrency: shared resource控制 -> 解决方案：lock/分布式算法
+    - Scalability: ability to change size -> network partitions(geography)（上海和北京出书中断，一个大system变成两个小的system）
+    - Fault Tolerance: nodes are very likely to fail -> MTTF（mean time to failure）/diverse faults -> node 数量上涨， whole system的MTTF下降
+    - Transparency: a whole quantity rather than a collection of components
+7. Grid Computing 与 Cloud Computing 的关系
+    - 都可以实现分布式计算，提供更强大的性能并解决异构问题。异构程度 CC > GC 
+    - Grid computing多用于科研领域，整合计算资源构成supercomputer
+    - Cloud computing可以说是Grid computing的商业实现，多面向应用提供运营服务 Grid computing关注计算能力/存储能力
+    - Cloud computing关注提供抽象资源/服务 Cloud computing建立在grid computing的技术框架之上，由GC发展而来
+
 
 ### past exam
 - > [2013 Q1] A) Explain what is meant by the terms:
@@ -115,6 +136,11 @@
     - Transport cost is zero - I can send as much data as I like for free
     - The network is homogeneous
     - Time is ubiquitous - Clock is same across all computers in network
+    - 墨学答案：There are some current challenges of large-scale distributed systems: 
+        - 1. Heterogeneity: devices in distributed systems may have different network/hardware/software/programming languages, which can cause troubles in deployment. 
+        - 2. Concurrency: the access to shared resources need to be carefully controlled between multiple processes to keep the system in a stable state and reach data consistent. 
+        - 3. Scalability: it is complex to design a scalable system because there might be difficulties in deployment/performance/administration. 
+        - 4. Fault tolerance: with the increasing of the system size, the MTTF becomes a problem. Also, many diverse faults can happen and repairing the system is hard.
 - > [sample Q2 B] Cloud computing solves some of these issues but not all. Explain. [4]
     - scalability and elastic scaling (purchase cloud when you need its service)
     - software deployment easier as we have snapshots/scripted deployment
@@ -122,6 +148,7 @@
     - data centers better networked. they are targeted to solve your problems
     - geospatially distributed and easy to migrate application
     - doesn't address many of the above though (但并没有解决上面的很多问题) (bandwidth from user/organization to data center)
+    - 墨学答案： Cloud computing solves the heterogeneity and scalability problem in some degree. For heterogeneity, the computing resources is better managed by the provider. The cloud platforms usually support snapshots/scripted deployment and offer useful tools to make it easier to solve heterogeneity problem. For scalability, users can purchase the service at anytime if needed so it support elastic scaling. The data centers are geospatial distributed and better networked. However, for challenges like fault tolerance, there is no simple solution to all scenarios and cloud computing cannot solve them either.
 - > [2015 Q1] A) Describe some of the erroneous assumptions that are often made in designing large-scale distributed systems. [5]
     - above
 - > [2014 Q1] A) Discuss the major trends in research and research computing over the last 20 years that have led to the emergence of Cloud computing. [6]
@@ -186,10 +213,12 @@
         - That is, if 95% of the program can be parallelized, the theoretical maximum speedup using parallel computing would be 20 times, no matter how many processors are used.
         - If the non-parallelisable part takes 1H, then no matter how many cores are used, it won’t complete in < 1H
         - Amdahl’s Law greatly simplifies the real world
+        - 当串行化比例一定时，加速比有上限 Fix Size Model
     2. Gustafson-Barsis's Law
         - speedup is a linear formula dependent on the number of processes and the fraction of time to run sequential parts，假设时间一定，增加CPU怎么影响能处理的大小
         - <img src="./docs/3.jpg" width="60%" height="50%" />
         - Faster (more parallel) equipment available, larger problems can be solved in the same time.
+        - 当可被并行化的代码占比足够大，加速比 就能随处理器数量线性增长； 非Fix Size Model
     3. comparison
         - Amdahl’s Law suggests that with limited task, speed up could not be too fast. 
         - Gustafson-Barsis’s Law suggests that with enough processors and remaining tasks, speed up will always meet the requirement.
@@ -203,6 +232,7 @@
         - HPC needs to keep balance of these
             - Based on the problem needs to be solved
     - There are many different ways to design/architect computers
+        - <img src="./docs/35.jpg" width="60%" height="50%" />
         - different flavours suitable to different problems (below)
             |               | Simple Instruction | Multiple Instruction |
             | ------------- | ------------------ | -------------------- |
@@ -295,20 +325,6 @@
         - Adv: 
             - Standardised, widely adopted, portable, performant
             - Parallelisation = users problem (user controll how to parallel)
-    - (HT) Condor，只是一种方法，考到再说
-        - A specialized workload management system for compute-intensive jobs developed at University of Wisconsin
-        - Adv:
-            - Offers job queueing mechanisms, scheduling policies, priority schemes, resource monitoring/management
-            - User submits jobs to Condor and it chooses when and where to run the jobs, monitors their progress, and informs the user upon completion 
-            - Allows to harvest “free” (?) CPU power from otherwise idle desktop workstations
-                - e.g. use desktop machines when keyboard and mouse are idle 
-                    - key press detected checkpoint and migrate a job to a different (idle) machine 
-            - No need for shared file system across machines
-                - Data can be staged to machines as/when needed
-            - Can work across organisational boundaries
-                - Condor Flocking
-            - ClassAds
-                - Advertise resources and accept jobs (according to policy)
     - Data Parallelism Approaches (week 9)
         - Challenges of big data
             - The most important kind of parallelism challenge?
@@ -317,11 +333,12 @@
             - ACID <-> BASE
         - Distributed File Systems 
             - e.g. Hadoop, Lustre, Ceph…
+        - Big data -> Distributed Data -> CAP & ACID & BASE -> Distributed File Systems
 4. Erroneous Assumptions of Distributed Systems (detail see slides)，下面的都是错的！！！！
-    - The network is reliable
-    - Latency is zero
-    - Bandwidth is infinite - I can send any amount of data I wish between any nodes
-    - The network is secure
+    - The network is reliable 能否到达?顺序?完整性?(断连、丢包)
+    - Latency is zero 传输速度?多节点情况?(服务器，VPN)
+    - Bandwidth is infinite - I can send any amount of data I wish between any nodes 任意数据大小?(限速)
+    - The network is secure 数据泄露?木马病毒?SQL注入?
         - People sending data to my services
             - Repeated password attempts, SQL injections, …!?
         - People actively attacking me
@@ -333,14 +350,16 @@
         - People breaking into one of my nodes
             - Trojans, viruses, brute force attacks, …
         - People stealing the physical hardware
-    - Topology doesn't change - Node x is always there
-    - There is one administrator
+    - Topology doesn't change - Node x is always there 网络拓扑变化?协议变化?
+    - There is one administrator 防火墙?权限设置?
         - 事实上有数百个甚至更多
         - e.g.: Firewall changes, server reconfigurations, services, access control (students/staff/others…)
-    - Transport cost is zero - I can send as much data as I like for free
+    - Transport cost is zero - I can send as much data as I like for free 服务供应商免费?
     - The network is homogeneous
         - 事实上有数十种不同的protocol
-    - Time is ubiquitous - Clock is same across all computers in network
+    - Time is ubiquitous - Clock is same across all computers in network 全局同步时钟是否存在?(时间同步问题)
+    - [-- Assumption ends --]
+    - [-- Assumption ends --]
     - [-- Assumption ends --]
     - issues of heterogeneity of compute, data, security from lecture 1
     - Distributed systems are widespread - The Internet
@@ -362,12 +381,14 @@
     - Partitioning
         - Decomposition of computational activities and data into smaller tasks 
         - Numerous Pprallelisation paradigms:
-            - Master-Worker/task-farming（整体结构层面的）
+            - Master-slave-farming（整体结构层面的）
+                - Master节点进行任务的分解和分发，并收集 Slave/Worker节点的处理结果生成最后结果 Master节点不干活，任务可以不同
                 - Master decomposes the problem into small tasks
                 - distributes to workers and gathers partial results to produce the result
                 - Master-worker/task-farming is like divide and conquer with master doing both split and join operation
                 - <img src="./docs/4.jpg" width="20%" height="50%" />
             - Divide and Conquer（整体结构层面的）
+                - 任务被分解为子任务，子任务独立处理，子结果被收集合成为最终结果
                 - 1) A problem is divided into two or more sub problems
                 - 2) each of these sub problems are solved independently
                 - 3) their results are combined
@@ -375,16 +396,19 @@
                 - Master-worker/task-farming is like divide and conquer with master doing both split and join operation
                 - <img src="./docs/7.jpg" width="20%" height="50%" />
             - Single Program Multiple Data (SPMD)（data层面的）
+                - 多节点执行在不同的数据段执行相同的代码
                 - Each process executes the same piece of code, but on different parts of the data
                 - Data is typically split among the available processors
                 - Data splitting and analysis can be done in many ways
                 - Commonly exploited model: MapReduce
                 - <img src="./docs/5.jpg" width="20%" height="50%" />
             - Pipelining （data层面的）
+                - 多阶段数据处理，每个阶段任务不同
                 - Suitable for applications involving multiple stages of execution
                 - typically operate on large number of data sets.
                 - <img src="./docs/6.jpg" width="30%" height="50%" />
-            - Speculation（整体结构层面的）
+            - Speculation（整体结构层面的）- 不是重点
+                - 当任务之间有复杂依赖，无法应用到以上的 模式时，对前置任务的处理结果进行预测并 开启后置任务，如果预测正确，则可提升性 能。否则将后置任务取消/重启。
                 - Used when it is quite difficult to achieve parallelism through the previous paradigms
                 - use "look ahead" execution
                     - Like look ahead, if the data is predictable, we could use the predicted data to do the following action while waiting for data.
@@ -395,22 +419,16 @@
                         - If the prediction is incorrect (which we can find out when P completes), we have to take corrective action, cancel C and restart C with the right value of V again. 
             - Parametric Computation
                 - not discussed?
-        -  Communication (relates with MPI)
-            - Flow of information and coordination among tasks that are created in the partition stage
-        -  Agglomeration
-            - (performance measuring) Tasks and communication created in above stages are evaluated for performance and implementation cost
-            - Tasks may be grouped into larger tasks to improve communication
-            - Individual communications can be bundled
-        -  Mapping/Scheduling
-            - (design to be able to scale up/down) Assign tasks to processors such that job completion time is minimized and resource utilization is maximized
 
 ### past exam
 - > [sample Q5] A) Explain Amdahl's law and discuss the challenges of its practical implementation. [2]
     - Program always bound by limitations caused by sequential part.
     - no matter how mang cores thrown at problem will be limited to the sequential part of the algorithm. 
         - Also inlcudes overheads required to deal with parallelism (loops, variables, communications)
+    - Amdahl’s law suggests that the maximum value of speedup is 1/α where α is the proportion of sequential part in the whole program, which means no matter how many cores used, the program speedup is always limited by the sequential part.
 - > [2014 Q4] A) Define Gustafson-Barsis’ law for scaled speed-up of parallel programs. [2]
     - Gustafson-Barsis’s Law suggests that with enough processors and remaining tasks, speed up will always meet the requirement. Faster (more parallel) equipment available, larger problems can be solved in the same time.
+    - Gustafson-Barsis’s Law suggests that with the increasing of processors number and the enlarging of problem size, we can always reach the desired speedup. Larger problems can be solved in the same time.
 - > [2014 Q4] B) A parallel program takes 128 seconds to run on 32 processors. The total time spent in the sequential part of the program is 12 seconds. What is the scaled speedup? [2]
     - S(N) = N - alpha * (N - 1) where N = n processors, alpha = time on sequential / time on parallel
     - S(N) = 32 - (12/128) * (32-1) = 931/32 = 29.09375
@@ -418,7 +436,7 @@
     - we know from b/ that it (theoretically) runs 29.09375 times faster using 32 processors compared to running on a single processor. 
     - If it takes 128 seconds with the 32 processor case then it would (theoretically) take 29.09375*128 = 3724 seconds in the single processor case.
 - > [2014 Q4] D) Why is theoretically italicized in the above? [3]
-    - you are not factoring the overheads dealing with the scalling system. If you have parallel processing, this can carry additional overheads, e.g. loops, communications, variables introduced to deal with parallel aspects. While you don't have this overheads in sequential programs.
+    - We are not factoring the overheads dealing with the parallel program. If we have parallel processing, this can carry additional overheads such as loops, communications, variables. Considering those overheads, the speedup will not be the same as the result.
 
 - > [2014 Q3] A) What is Flynn’s Taxonomy? [2]
     - |               | Simple Instruction | Multiple Instruction |
@@ -431,40 +449,42 @@
         - The HPC uses MIMD so you can have multiple applications running at the same time, reading/writing/processing multiple different types of data but still on the same cluster
 - > [2015 Q4] A) Explain the following terms in the context of high performance computing.
     - > a. Data parallelization [1]
-        - problem like you have a large amount of data But you need to process, analysis and aggregrate  in a small amount in a parallel way.
+        - Splitting an amount of data into partitions and distributing them among multiple processors or cores to be processed simultaneously. Same computation will be applied to each portion of data and the results are combined to generate the final output.
     - > b. Compute parallelization [1]
-        - many processes and many threads for process things concurrently
+        - Dividing a complex computation into smaller or simpler parallelizable parts, which can be executed simultaneously on different processors or cores. Each processor handles a different portion of the computation.
 - > [2015 Q4] D) Compute parallelization of an application can be achieved through a variety of paradigms including task farming and single program multiple data. Describe these approaches and explain when they might best be applied. [3]
     - Master-Worker/task-farming
         - Master decomposes the problem into small tasks
         - distributes to workers and gathers partial results to produce the result
         - Master-worker/task-farming is like divide and conquer with master doing both split and join operation
+        - The model is suitable for applications with a small amount of computation and high communication overhead.
     - Single Program Multiple Data (SPMD)
         - Each process executes the same piece of code, but on different parts of the data
         - Data is typically split among the available processors
         - Data splitting and analysis can be done in many ways
         - Commonly exploited model: MapReduce
+        - The model is suitable for applications that require large amounts of computation and have minimal communication between the processes.
     
 
 ## Week4 - The Spartan HPC System
 - Some background on supercomputing, high performance computing, parallel computing, research computing (they're not the same thing!).
     - Supercomputer
-        - Any single computer system that has exceptional processing power for its time.
+        - Any single computer system that has exceptional processing power for its time. 单一计算机，性能超群
     - Clustered computing
-        - is when two or more computers serve a single resource 
+        - is when two or more computers serve a single resource 多台计算机协助计算
             - e.g.: A collection of smaller computers strapped together with a high-speed local network
         - Adv: improves performance and provides redundancy;
-    - HPC - high performance computing
+    - HPC - high performance computing 侧重点在计算架构
         - It is any computer system whose architecture allows for above average performance
         - The clustered HPC is the most efficient, economical, and scalable method, and for that reason it **dominates supercomputing**.
     - Parallel and Research Programming
-        - Parallel computing refers to the submission of jobs or processes over multiple processors and by splitting up the data or tasks between them
+        - Parallel computing refers to the submission of jobs or processes over multiple processors and by splitting up the data or tasks between them 重点在并行，多处理器，更加具体
             - With a cluster architecture, applications can be more easily parallelised across them.
-        - Research computing is the software applications used by a research community to aid research.
+        - Research computing is the software applications used by a research community to aid research. 计算目的是辅助研究
             - challenge: This skills gap is a major problem and must be addressed because as the volume, velocity, and variety of datasets increases then researchers will need to be able to process this data.
 2. Flynn’s Taxonomy and Multicore System
     - Over time computing systems have moved towards multi-processor, multi-core, and often multi-threaded and multi-node systems.
-    - As computing technology has moved increasingly to the MIMD taxonomic classification additional categories have been added:
+    - As computing technology has moved increasingly to the MIMD taxonomic classification additional categories have been added新增了玩意：
         - Single program, multiple data streams (SPMD)
         - Multiple program, multiple data streams (MPMD)
 3. Things are more important than performance
@@ -517,11 +537,12 @@
     - > c. Wall-time [1]
         - the time limit when you submit job that you think the job will finish by
 
-## Week5 - Cloud Computing & ~~Getting to Grips with the University of Melbourne Research Cloud~~
+## Week5 - Cloud Computing
 Cloud computing is a model for enabling ubiquitous, convenient, on-demand network access to a shared pool of configurable computing resources (e.g., networks, servers, storage, applications, and services) <u>that can be rapidly provisioned and released with minimal management effort or service provider interaction</u> 可以通过最少的管理工作或服务提供者交互从而可以快速地配置和发布
 - <img src="./docs/8.jpg" width="70%" height="50%" />
 - 上图具体笔记见墨学week5课件
 - 注意别忽略最下面的五个character！
+- <img src="./docs/36.jpg" width="70%" height="50%" />
 1. Deployment Models
 
     || Private| Community| Public| Hybrid |
@@ -529,10 +550,11 @@ Cloud computing is a model for enabling ubiquitous, convenient, on-demand networ
     |pro|1. **Control**<br>2. **Consolidation of resources**<br>3. **Easier to secure** - easy to setup firewall<br>4. **More trust**||1. Utility computing<br>2. **Can focus on core business** - no need to care infrasture or be a devop<br>3. Cost-effective - use as much as you need<br>4. “Right-sizing”<br>5. Democratisation of computing<br>|1. **Cloud-bursting** - Use private cloud, but burst into (突然变成) public cloud when needed (What is hybrid cloud) |
     |con|1. Relevance to core business?<br>e.g. Netflix to Amazon<br>2. Staff/management overheads - need devop<br>3. Hardware obsolescence - need to refesh hardware<br>4. Over/under utilisation challenges - recycle resources<br>| | 1. **Security** - people can see your sensitive data<br>2. Loss of control<br>3. **Possible lock-in** - difficult to switch Azure if using AWS<br>4. Dependency of Cloud provider continued existence<br>| 1. How do you move data/resources when needed?<br>2. How to decide (in real time?) what data can go to public cloud?<br>3. Is the public cloud compliant with PCI-DSS (Payment Card Industry – Data Security Standard)?<br>|
     |example| | | AWS| Eucalyptus, VMWare vCloud Hybrid Service|
-
+    
 2. Delivery Models
 - responsibilities:
     - <img src="./docs/9.jpg" width="70%" height="50%" />
+    - <img src="./docs/37.jpg" width="70%" height="50%" />
 -
     | | Iaas| Paas|Saas|
     |---|---|---|---|
@@ -653,13 +675,15 @@ Cloud computing is a model for enabling ubiquitous, convenient, on-demand networ
     - Create a playbook that contains YAML files. Typical contents include variables, inventories and roles/tasks/templates. Inventories will include the servers/database used for the software etc etc. 
     - Then say how you would run the script using openrc.sh etc. Note 2 points so massive amounts of detail not needed.
 
-## Week 6 – Web Services, ReST Services ~~and Twitter demo~~
+## Week 6 – Web Services, ReST Services
 
 ### SOA
 
-1. What's in an Architecture?
+1. What's in an Architecture? 架构与面向服务架构
     - A (system) architecture is just the way different components are distributed on computers, 
     - and the way in which they interact with each other.
+    - 描述软件整体的结构，组件分布，组件关系和交互方法 当组件分布在不同位置，需要构建Service以提供松耦合(loosely-coupled ways)即为 SoA，使得组件之间相互独立又互相联系，一般通过规范化的消息系统进行沟通
+    - **优点**开放性，标准化，可重用，易扩展
 2. Why Service-oriented Architectures - SOA?
     - When an architecture is completely contained within the same machine, components can communicate directly
         - e.g. through function calls or object instantiations.
@@ -676,7 +700,6 @@ Cloud computing is a model for enabling ubiquitous, convenient, on-demand networ
     |A set of architectural principles, patterns and criteria|that support modularity, encapsulation, loose coupling, separation of concerns, reuse and composability|
     |A programming model|complete with standards, tools and technologies that supports development and support of services (note that there can be many flavours of services)|
     |A middleware solution|optimized for service assembly, orchestration, monitoring, and management (Can include tools and approaches that combine services together.)<br/>e.g. as workflows. - later on security lecture|
-
 4. SOA design principle
 
     |||exmaple|
@@ -710,7 +733,21 @@ Cloud computing is a model for enabling ubiquitous, convenient, on-demand networ
     - SDMX (Statistical Data Markup eXchange)
         - approach the statistical data around the world
 3. SOAP/WS v.s. ReST  
-    SOAP (Simple Object Access Protocol)
+    SOAP (Simple Object Access Protocol) 
+        - SOAP简单对象访问协议(Simple Object Access Protocol) 是一种交互数据的协议规范， 定义了消息的结构、格式和元数据，类似信封，需要提供收件人、寄件人、信封头、 信件内容等等。SOAP消息基于XML语言，在Web上交换结构化和固化的信息，其中 包含有关消息内容和结构的信息，例如调用请求和响应等数据。
+    - SOAP主要使用于Web服务，使用了HTTP协议。
+    - SOAP/WS即使用了SOAP协议的Web服务，一般是基于远程过程调用(Remote Procedure Call) 实现通信，也有一部分是基于消息风格的通信。本质均为客户端通过 构建SOAP消息使用远程的Web服务，而Web服务通过解析SOAP消息来处理请求。
+    - SOAP/WS还定义了一组标准，包括WSDL和UDDI。其中WSDL用于描述Web服务的接口 和协议，UDDI用于描述Web服务的位置和可用性。SOAP/WS支持复杂的消息格式和高级的安全性，更加可靠以及更广泛的适用范围
+
+    ReST
+    - ReST表述性状态转移(Representational State Transfer) 是一种面向资源的设计风格(如何使用HTTP)，提出了一系列约束条件和原则。相比较SOAP/WS更加轻量级，简单 灵活。ReST主要使用于Web服务，也使用了HTTP协议。
+    - ReST中，每个资源都有唯一的URI(Uniform Resource Identifier)来标识，并通过HTTP方 法进行操作，并由服务器返回HTTP响应，其中包含资源的状态信息和表示，如XML 或JSON。
+    - ReST允许客户端和服务器的交互是无状态的，从而使得客户端和服务器可以分别进 行扩展和改进。ReST更加适合于简单的数据交换和资源管理。
+    - ROA(Resource-Oriented Architecture)是一种架构风格，侧重于设计和管理资源，以便更好的构建ReSTful应用。
+
+    **注意**
+    - 用ReST -> ROA架构
+    - 用SOAP -> SOA架构
 
     |ReST|SOAP/WS|
     |---|---|
@@ -791,12 +828,20 @@ Representational State Transfer (ReST) is intended to evoke an image of how a we
             - can be used to support the definition and creation of services or service endpoints. 
     - ROA \& Rest
         - ROA has a style of supporting Restful services that allows folk to interact/navigate their functionality (HATEOS etc). The services still do PUT, POST, GET etc.
+    - **注意**
+        - **用ReST -> ROA架构**
+        - **用SOAP -> SOA架构**
     - ROA v.s. SOA
         - similar
-            - Much of the philosophy behind SOA applies to ROA, 
-                - e.g. services should support abstraction, contract, autonomy etc, 
+            - They both have standardized service contract, use XML or JSON to represent data and exchange information.
+            - They are both based on web services and use HTTP as the communication protocol.
+            - They both aim for improving scalability and reusability of applications.
+
         - difference
-            - ROA is compared to SOA as a different (better) approach that can be used to support the definition and creation of services or service endpoints. 
+            - ROA emphasizes the concept of resources while SOA emphasizes the concept of services.
+            - ROA uses URIs and HTTP methods to implement operations on resources, while SOA use service interfaces and operations.
+            - ROA is simpler and more flexible, while SOA is more complex and powerful.
+            - ROA is always used for lightweight applications and support quick setup, while SOA is typically used for large enterprise applications.
         - ROA has advantages
             - there is no need to understand what methods mean or deal with complex WSDL etc. You can mix/match service models
                 - e.g. consider the AURIN architecture with ReST, SOAP and many other service flavours.
@@ -851,12 +896,9 @@ Representational State Transfer (ReST) is intended to evoke an image of how a we
         |Service encapsulation| many services are consolidated for use under a SOA and their inner workings hidden.|
         |Service location transparency| the ability of a service consumer to invoke a service regardless of its actual location in the network.|client only use url to use the service on the web regardless of location of service
 - > [2015 Q2] B) Explain why and how Cloud infrastructures have benefited from SOA. [3]
-    - standardized interfaces available tn enable you not worry how the cloud internal do tasks for external interactions
-    - When an architecture is completely contained within the same machine, components can communicate directly
-        - e.g. through function calls or object instantiations.
-    - However, when components are distributed such a direct approach typically cannot be used  (e.g. Assignment 2!)
-    - Therefore, components (more properly, systems) have to interact in more loosely-coupled ways. 
-    - **Services** are often used for this. Typically combinations and commonality of services can be used to form a **Service-oriented Architecture (SoA)**.
+    - SOA promotes a modular and flexible approach to application development, where software is broken down into small, independent components. This makes it easier to develop and maintain cloud applications without affecting other services in the system
+    - SOA makes it easier to integrate various cloud services using standardized interfaces and protocols, which allows for greater interoperability and flexibility in cloud system. This enabling businesses and organizations to mix cloud services to meet their demands.
+    - SOA allows for greater scalability and agility in cloud infrastructures, making it easier to scale up or down as demand changes, which makes the services more efficient and cost- effective.
 - > [2014 Q1] B) How has the evolution of service-oriented architectures supported Cloud computing? [2]
     - SOA has Uniform interface, abstraction, standard contract etc etc avoid all Clouds building their own bespoke solutions (from the forum, below from recording)
     - you have standardized interface for the service-oriented architectures
