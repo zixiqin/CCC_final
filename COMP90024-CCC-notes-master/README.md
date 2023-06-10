@@ -611,20 +611,20 @@ Cloud computing is a model for enabling ubiquitous, convenient, on-demand networ
 
 ## Workshop week5: Auto-Deployment -- Ansible
 - Reason for auto-deployment (**comparison**)
-  - We are easy to forget what software we installed, and what steps we took to configure the system
-  - Manual process is error-prone, can be non-repeatable
-  - Snapshots are monolithic
+  - 系统数量会更加庞大(前端后端数据等)
+  - We are easy to forget what software we installed, and what steps we took to configure the system部署细节容易遗漏，导致系统配置不完整，可能影响正常运行
+  - Manual process is error-prone, can be non-repeatable手动操作过于繁琐而容易出错
+  - Snapshots are monolithic 快照机制通常只能记录系统当前状态而非记录系统的变更历史
     - provide no record of what has changed
   - Manual deployment provides no record of what has changed
 - Automation is the mechanism used to make servers reach a desirable state.
   - Automation provides (**advantages**)
-    - A record of what you did
-    - Knowledge about the system in code
-    - Making the process repeatable
-    - Making the process programmable
-    - Infrastructure as Code
-- Configuration management (CM) tools
-    - Configuration management refers to the process of systematically handling changes to a system in a way that it maintains integrity over time.
+    - A record of what you did记录操作记录，有助于追踪问题和排查错误
+    - 形成系统知识库，有助于将配置和管理知识编码化，便于后续维护升级
+        - Knowledge about the system in code
+        - Making the process repeatable
+        - Making the process programmable
+        - Infrastructure as Code
 - Ansible is an automation tool for configuring and managing computers.
   - Features about ansible (Pros)
     - Easy to learn
@@ -634,18 +634,25 @@ Cloud computing is a model for enabling ubiquitous, convenient, on-demand networ
       - No need for centralized management servers/daemons
       - Single command to install
       - Using SSH to connect to target machine
-    - Idempotent
+    - Idempotent 幂等性，避免重复执行的副作用
       - Executing N times no different to executing once
       - Prevents side-effects from re-running scripts
-    - Extensible
+    - Extensible扩展性高，用户自定义空间大
       - Write you own modules
-    - Rolling updates
+    - Rolling updates支持不停机部署，即滚动更新
       - Useful for continuous deployment/zero downtime deployment
-    - Inventory management
-      - Dynamic inventory from external data sources
+    - Inventory management 库存管理
+      - Dynamic inventory from external data sources 动态管理，可以载入新数据
       - Execute tasks against host patterns
-    - Ansible Vault for encryption
-
+    - Ansible Vault for encryption支持数据加密
+- Configuration management (CM) tools 结构化组织管理可以提高可读性、可维护性和可复用性
+    - Configuration management refers to the process of systematically handling changes to a system in a way that it maintains integrity over time.
+    - 相比单文件模式， 单文件模式适用于简单的任务和快速的临时操作
+- YAML
+    - YAML是一种数据序列化语言，通常用于将数据从一种格式转换为另一种格式，例如把YAML配置文件转换为程序中的对象或数据结构 
+    - YAML文件层次结构简单，使用缩进和冒号表示层级关系
+    - <img src="./docs/38.jpg" width="20%" height="50%" />
+    - <img src="./docs/39.jpg" width="20%" height="50%" />
 ### past exam
 - > [Sample Q1, 2017 Q7 B each [2], 2015 Q7 A [4, 3]] Applications can be deployed across Clouds either through creation and deployment of virtual images (snapshots) or through scripting the installation and configuration of software applications.
     - > What are the benefits and drawbacks of these approaches? [3]
@@ -979,11 +986,15 @@ Representational State Transfer (ReST) is intended to evoke an image of how a we
         |Document-oriented DBMS store|- data as structured documents, usually expressed as XML or JSON<br/>- Document-oriented databases are one of the main categories of NoSQL databases|(e.g. Apache CouchDB, MongoDB)
         |NoSQL DBMSs|While there is nothing preventing SQL to be used in distributed environments, alternative query languages have been used for distributed databases, hence they are sometimes called NoSQL DBMSs|
     - Why Document-oriented DBMS for Big data?（课件中只有下面的第一部分，但其余几部分也是对的）
-        - While Relational DBMSs are extremely good for ensuring consistency and availability, the normalization that lies at the heart of a relational database model implies fine-grained data, which are less conducive to partition-tolerance than coarse-grained data.
+        - 结论：While Relational DBMSs are extremely good for ensuring consistency and availability, the normalization that lies at the heart of a relational database model implies fine-grained data, which are less conducive to partition-tolerance than coarse-grained data.对于能够保证数据一致性和系统可用性的关系型数据库管理系统，其数据库模型的标 准化意味着细粒度数据，而粗粒度数据更加利于分区容错，即大数据分布式场景。
+            - 原因：
+                - 1. 粗粒度数据减少数据关联，避免了关系型数据库中复杂的关联关系。Document- oriented DBMS中通常是通过Collection存储数据，数据关联通过文档内嵌或引用实现， 不会对于分区产生太大影响。
+                - 2. 粗粒度数据更容易让数据的访问和修改局限在同一分区内，避免了分区访问和修改 开销，提高了数据访问效率和可靠性。
+                - 3. 粗粒度数据方便数据扩展，可以轻松添加新的字段而避免对整个表进行修改，支持 数据的扩展和升级。
             - Example:
                 -  A typical contact database in a relational data model may include: a person table, a telephone table, an email table and an address table, all relate to each other.
                 -  The same database in a document-oriented database would entail one document type only, with telephones numbers, email addresses, etc., nested as arrays in the same document.
-        - While Relational DBMSs are extremely good at ensuring consistency, they rely on normalized data models that, in a world of big data (think about Veracity and Variety) can no longer be taken for granted.
+        - 可能存在的问题：While Relational DBMSs are extremely good at ensuring consistency, they rely on normalized data models that, in a world of big data (think about Veracity and Variety) can no longer be taken for granted.依赖于规范化的数据模型（现实世界做不到）
             - Therefore, it makes sense to use DBMSs that are built upon data models that are not relational (relational model: tables and relationships amongst tables).
         - While there is nothing preventing SQL to be used in distributed environments, alternative query languages have been used for distributed databases, hence they are sometimes called NoSQL DBMSs
         - Relational database finds it challenging to handle such huge data volumes. To address this, RDBMS added more central processing units (or CPUs) or more memory to the database management system to scale up vertically
@@ -991,6 +1002,9 @@ Representational State Transfer (ReST) is intended to evoke an image of how a we
         - Big data is generated at a very high velocity. RDBMS lacks in high velocity because it’s designed for steady data retention rather than rapid growth
 
 4. Brewer’s CAP Theorem
+    - Consistency: 每个client从所有node获得的回应相同 
+    - Availability: 每个client都可以从cluster中任何node获得回应 
+    - Partition-tolerance: 单个或多个node分区不影响cluster运行
     - Consistency, Availability, Partition-Tolerance
 
         |||
@@ -1013,6 +1027,8 @@ Representational State Transfer (ReST) is intended to evoke an image of how a we
     - <img src="./docs/14.jpg" width="30%" height="50%" />
 
     1. Two phase commit: Consistency and Availability（relational DB和MongoDB用的这个）
+        - 分布式事务协议，用于确保多个数据库或资源上的事务被原子性的执行，所有操作要 么成功，要么失败
+        - 协议保证了事务在分布式系统中的原子性和一致性，但是由于长时间通信可能导致性 能问题(可用性)和网络故障，另外对于Coordinator出现问题，需要更多操作恢复。 两阶段提交难以应对网络分区情况。
         - This is the usual algorithm used in relational DBMS's (and MongoDB)
 
             ||what does it entail?|by|
@@ -1021,7 +1037,10 @@ Representational State Transfer (ReST) is intended to evoke an image of how a we
             |reduced availability|data lock, stop in case of partition
         - Conclusion
             - Therefore, two-phase commit is a good solution when the cluster is co-located, less good when it is distributed
+        
     2. Paxos: Consistency and Partition-Tolerance
+        - 一种分布式一致性算法，即共识算法，目标是让多个节点就某个值达成一致，原理主 要是通过一个阶段性的投票过程，类似少数服从多数，且即使存在某些节点失败或者 出现故障的情况下也能保证正确性。
+        - 使用约束条件，例如多数节点的同意，来保证分布式系统中的一致性。提 案表决期间或网络分区时，较小子集无法工作或参与决策，牺牲一部分可用性，或整个系统缺少可以做出决策的子集，丧失可用性。
         - This family of algorithms is driven by consensus, and is both partition-tolerant and consistent
         - In Paxos, every node is either a proposer or an accepter:
             - a proposer proposes a value (with a timestamp)
@@ -1029,7 +1048,9 @@ Representational State Transfer (ReST) is intended to evoke an image of how a we
             - When a proposer has received a sufficient number of acceptances (a quorum is reached), and a confirmation message is sent to the accepters with the agreed value
         - Conclusion
             - Paxos clusters can recover from partitions and maintain consistency, but the smaller part of a partition (the part that is not in the quorum) will not send responses, hence the availability is compromised
-    3. Multi-Version Concurrency Control (MVCC): Availability and Partition-tolerance(couchDB用的这个)
+    3. Multi-Version Concurrency Control (MVCC): Availability and Partition-tolerance(couchDB用的这个-有个tag) 
+        - 一种数据库管理系统DBMS中的并发控制方法，牺牲了一定的数据一致性，确保多个事务可以并发的访问数据库而不会产生冲突。
+        - MVCC中，每个对象都有多个版本，伴随着时间戳或序列号，当一个事务要读取或写入一个对象时，都会获取对象的一个版本，版本时间戳或需要必须早于事务开始的时间戳。
         - MVCC is 
             - **a method to ensure availability** (every node in a cluster always accepts requests) and
             - **some sort of recovery from a partition** by reconciling the single databases with revisions (data are not replaced, they are just given a new revision number)
@@ -1074,22 +1095,27 @@ Representational State Transfer (ReST) is intended to evoke an image of how a we
         - <img src="./docs/31.png" width="60%" height="50%" />
             
             - There are 16 shards since the three node clustered database has n=2 replicas and q=8 shards. 
-3. Partitions
+3. Partitions - (CouchDB)
     - What is it?  
         - A partition is a grouping of logically related rows in the same shard 
         - 可以理解为更进一步的range sharding
+        - partition是对shard的更细粒度的划分，将逻辑相关的行进行分组，查询时限制其在较小的组内查找从而提高性能，需要在数据库创建时声明以启用partition
             - e.g.: all the tweets of the same user
     - Advantage:  
         - Partitioning improves performance by restricting queries to a single shard
             - To be effective, partitions have to be relatively small (certainly smaller than a shard)
     - A database has to be declared “partitioned” during its creation
     - Partitions are a new feature of CouchDB 3.x
-4. MapReduce Algorithms
+4. MapReduce Algorithms - (CouchDB)
     - What is it?  
         - This family of algorithms is particularly suited to parallel computing of the Single-Instruction, Multiple-Data type (SIMD) (see Flynn's taxonomy in a previous lecture)
+        - Map步骤将数据转换为键值对形式，每个键值对都代表一个文档或一个文档的一部分。
+        - Reduce步骤将具有相同键的值进行合并，生成一个新的键值对。
     - Advantage:  
         - parallelism
         - greatly reducing network traffic by moving the process to where data are
+        - MapReduce算法的优点是可以处理非常大的数据集，并且可以在分布式环境中运行，从而提高处理性能。CouchDB支持在视图中使用MapReduce算法进行查询和数据处理。
+
     - Procedure:  
         1. Map: distributes data across machines, while 
         2. Reduce: hierarchically summarizes them until the result is obtained.
@@ -1261,11 +1287,15 @@ Your answer should cover challenges with data distribution, traditional database
   - Pros
     - Application containment
     - Horizontal scalability
+    - V: 提高硬件利用率、灵活性、可扩展性、管理效率和安全性，降低成本和消耗
   - Cons
     - The guest OS and binaries can give rise to duplications between VMs wasting server processors, memory and disk space and limiting the number of VMs each server can support -> virtualization overhead
 - Containerization
   - Pros
     - It allows virtual instances to share a single host OS (and associated drivers, binaries, libraries) to reduce these wasted resources since each container only holds the application and related binaries. The rest are shared among the containers.
+    - 在V的基础上，共享OS以及相关的驱动，库文件等以再次减少资源浪费
+
+- V & C: 本质均为资源的共享与隔离， VM和容器可同时存在
 - |Parameter | Virtual Machines                                             | Container                                     |
   | ------------- | ------------------------------------------------------------ | --------------------------------------------- |
   | Guest OS      | Run on virtual Hardware, have their own OS kernels           | Share same OS kernel                          |
@@ -1286,6 +1316,7 @@ Your answer should cover challenges with data distribution, traditional database
     - Host operation system
 
 ### What is Container?
+- 类似VM，包含运行应用程序所需要的代码，环境，系统工具和库，作为运行实例运行某个image
 - Similar concept of resources isolation and allocation as a virtual machine
 - Without bundling the entire hardware environment and full OS
 - What container runtimes are in use?
@@ -1298,14 +1329,14 @@ Your answer should cover challenges with data distribution, traditional database
   - What is it?
     - the most successful containerization technology.
   - Docker Nomenclature
-    - Container: a process that behaves like an independent machine, it is a runtime instance of a docker image.
-    - Image: a blueprint for a container.
-    - Dockerfile: the recipe to create an image.
-    - Registry: a hosted service containing repositories of images. E.g., the Docker Hub (https://hub.docker.com)
-    - Repository: is a sets of Docker images.
-    - Tag: a label applied to a Docker image in a repository.
-    - Docker Compose: Compose is a tool for defining and running multi-containers Docker applications. 
-    - Docker SWARM: a standalone native clustering / orchestration tool for Docker.
+    - Container: a process that behaves like an independent machine, it is a runtime instance of a docker image.类似VM，包含运行应用程序所需要的代码，环境，系统工具和库，作为运 行实例运行某个image
+    - Image: a blueprint for a container.一个只读的模板/蓝图，用于创造container，包含运行所需的文件和配置信息， 即为一个container的静态快照，理解为环境模板
+    - Dockerfile: the recipe to create an image. 一个文本文件，用于描述如何构建image，包含了所需的指令和配置信息， 例如基础image、应用程序代码、依赖项、环境变量
+    - Registry: a hosted service containing repositories of images. E.g., the Docker Hub (https://hub.docker.com)存储image的服务器，本地或远程，可以容纳多个repository
+    - Repository: is a sets of Docker images.image仓库，用于存储管理多个image，通过tag区分不同版本
+    - Tag: a label applied to a Docker image in a repository.repository中image上的标签，一般包括版本号和发布日期
+    - Docker Compose: Compose is a tool for defining and running multi-containers Docker applications. 用于定义，运行，管理多个Docker container的工具，通过YAML文件 定义多个container的配置信息，依赖关系，网络设置等 (单主机) 
+    - Docker SWARM: a standalone native clustering / orchestration tool for Docker. Docker官方推出的容器管理工具 (多主机)
   - Manage Data in Docker
     - By default, data inside a Docker container won’t be persisted when a container is no longer exist.
     - You can copy data in and out of a container.
@@ -1315,26 +1346,10 @@ Your answer should cover challenges with data distribution, traditional database
   - different networking options
     - host: every container uses the host network stack; which means all containers share the same IP  address, hence ports cannot be shared across containers
     - bridge: containers can re-use the same port, as  they have different IP addresses, and expose a port of their own  that belongs to the hosts, allowing the containers to be somewhat visible from the outside.
+=
 
 ### Dockerfile
-  - ```
-    FROM nginx:latest
-
-    ENV WELCOME_STRING "nginx in Docker"
-
-    WORKDIR /usr/share/nginx/html
-
-    COPY ["./entrypoint.sh", "/"]
-
-    RUN cp index.html index_backup.html; \
-            chmod +x /entrypoint.sh; \
-            apt-get update && apt-get install -qy vim
-    # above run at build time
-    # below run at start up
-
-    ENTRYPOINT ["/entrypoint.sh"]
-    CMD ["nginx", "-g", "daemon off;"]
-    ```
+  - <img src="./docs/40.jpg" width="30%" height="50%" />
   - ENTRYPOINT
     - ENTRYPOINT gets executed when the container starts. CMD specifies arguments that will be fed to the ENTRYPOINT.
     - Unless it is overridden, ENTRYPOINT will always be executed.
@@ -1343,6 +1358,7 @@ Your answer should cover challenges with data distribution, traditional database
 
 ### What are Orchestration Tools?
 - Container orchestration technologies provides a framework for integrating and managing containers **<u>at scale</u>**
+- <img src="./docs/41.jpg" width="30%" height="50%" />
 - Goals/benefits
   - Simplify container management process
   - Help to manage availability and scaling of containers
@@ -1361,6 +1377,7 @@ Your answer should cover challenges with data distribution, traditional database
 ### Docker SWARM
 - What is Docker SWARM (the correct name: Docker in SWARM mode)? 
   - It is a Docker orchestration tool.
+  - Docker SWARM主要用于在多个Docker主机中创建和管理一个容器集群，提供自动扩展、负载均衡和服务发现等功能，需要通过Docker命令行或Docker API进行配置和管理，比较复杂。
 - Why Docker SWARM?
   - Hundreds of  containers to manage?
   - Scalability
@@ -1485,16 +1502,18 @@ Terminology
 - 
     |||
     |---|---|
-    |Virtual Machine Monitor/Hypervisor|The virtualisation layer between the underlying hardware the virtual machines and guest operating systems it supports. Give a perception of a whole machine.
-    |Virtual Machine|A representation of a real machine using hardware/software that can host a guest operating system
-    |Guest Operating System|An operating system that runs in a virtual machine environment that would otherwise run directly on a separate physical system.
+    |Virtual Machine Monitor/Hypervisor|The virtualisation layer between the underlying hardware the virtual machines and guest operating systems it supports. Give a perception of a whole machine.系统级软件，管理虚拟机以访问计算机硬件。
+    |Virtual Machine|A representation of a real machine using hardware/software that can host a guest operating system软件模拟的虚拟计算机系统，使用物理计算机硬件。
+    |Guest Operating System|An operating system that runs in a virtual machine environment that would otherwise run directly on a separate physical system.虚拟机中的操作系统。
 1. What happens in a VM?
     - <img src="./docs/16.jpg" width="70%" height="30%" />
     - Inside the virtual machine, there are Virtual Network Device, VHD(Virtual Hard disk), VMDK(Virtual Machinie Disk), qcow2(QEMU Copy on Write)
     - Guest OS apps “think” they write to hard disk but translated to virtualised host hard drive by VMM
         - Which one is determined by image that is launched
+    - VMM 让里面的VM和Guest OS 以为自己什么都行
 
-2. Motivation (why we want VM/virtualization/advantages) ~~& History~~
+2. Motivation (why we want VM/virtualization/advantages) 
+- 提高硬件利用率、灵活性、可靠性、管理效率和安全性，降低成本和能源消耗
     |motivation||
     |---|---|
     |Server Consolidation|1. Increased utilisation<br/>2. Reduced energy consumption
@@ -1513,20 +1532,21 @@ Terminology
 3. Classification of Instructions
     ||||
     |---|---|---|
-    |Privileged Instructions|instructions that trap if the processor is in user mode and do not trap in kernel mode
-    |Sensitive Instructions|instructions whose behaviour depends on the mode or configuration of the hardware|Different behaviours depending on whether in user or kernel mode<br/>- e.g. POPF interrupt (for interrupt flag handling)
-    |Innocuous Instructions|instructions that are neither privileged nor sensitive|Read data, add numbers etc
+    |Privileged Instructions|instructions that trap if the processor is in user mode and do not trap in kernel mode(特权指令) 只能被操作系统内核或特定权限级别程序访问的指令，通常涉及系统资源的访问管理， 会影响系统安全性和稳定性。
+    |Sensitive Instructions|instructions whose behaviour depends on the mode or configuration of the hardware|Different behaviours depending on whether in user or kernel mode<br/>- e.g. POPF interrupt (for interrupt flag handling)敏感指令) 会导致安全漏洞或风险的指令，通常与系统安全有关，例如读取或修改敏感信息，绕 过访问控制，也会影响系统安全性和稳定性。
+    |Innocuous Instructions|instructions that are neither privileged nor sensitive|Read data, add numbers etc(无害指令) 不会导致系统安全问题或风险的指令，通常涉及普通计算和数据操作，不需要特殊权限和限制。
+
     - Popek and Goldberg Theorem  
         - For any conventional third generation computer, a virtual machine monitor may be constructed if the set of **sensitive instructions** for that computer is a subset of the set of **privileged instructions** i.e. have to be trappable
     - x86 architecture was historically not virtualisable, due to **<u>sensitive instructions</u> that could not be trapped** 
     - Intel and AMD introduced extensions to make x86 virtualisable
-3. What are the requirements for virtualisation?
+3. What are the requirements for virtualisation? VMM的责任
     - <img src="./docs/17.jpg" width="40%" height="30%" />
     |Typical Virtualisation Strategy||Achieved by|problem|
     |---|---|---|---|
-    |De-privileging (trap-and-emulate)|trap-and-emulate: VMM emulates the effect on system/hardware resources of privileged instructions whose execution traps into the VMM|running GuestOS at a lower hardware priority level than the VMM|Problematic on some architectures where privileged instructions do not trap when executed at de-privileged level
-    |Primary/shadow structures|1. VMM maintains “shadow” copies of critical structures whose “primary” versions are manipulated by the GuestOS, e.g. memory page tables<br/>2. Primary copies needed to insure correct versions are visible to GuestOS
-    |Memory traces|Controlling access to memory so that the shadow and primary structure remain coherent|write-protect primary copies so that update operations cause page faults which can be caught, interpreted, and addressed <br/>- Someones app/code doesn’t crash the server you are using!!!
+    |De-privileging (trap-and-emulate)|trap-and-emulate: VMM emulates the effect on system/hardware resources of privileged instructions whose execution traps into the VMM；VMM通过De-privileging进行指令降级，阻止VM中操作直接访问或修改关键系统资源，低权限指令需 要通过VMM中转，从而保护系统安全性和稳定性。|running GuestOS at a lower hardware priority level than the VMM|Problematic on some architectures where privileged instructions do not trap when executed at de-privileged level；
+    |Primary/shadow structures|1. VMM maintains “shadow” copies of critical structures whose “primary” versions are manipulated by the GuestOS, e.g. memory page tables<br/>2. Primary copies needed to insure correct versions are visible to GuestOS； VMM通过Primary/shadow structure对部分内存进行 复制，Guest OS实际是修改副本数据，由VMM进 行同步修改，进行内存访问的地址转换，保证系统 安全性和隔离性。
+    |Memory traces|Controlling access to memory so that the shadow and primary structure remain coherent；VMM通过Memory traces记录客户机对内存的访问， 保存在VMM的内存跟踪表中，进行访问时检查和 对应操作，例如重定向，并且对内存访问进行监管， 保护系统安全性稳定性。|write-protect primary copies so that update operations cause page faults which can be caught, interpreted, and addressed <br/>- Someones app/code doesn’t crash the server you are using!!!
     - Do sensitive instructions and privileged instructions both need to be trap-and-emulate?
         - All sensitive/privileged instructions have to be dealt with. Some will need to be emulated/translated
         - others can just happen depending on the mode and/or whether para-virtualisation is supported.
@@ -1534,11 +1554,10 @@ Terminology
 4. Virtualisation approaches (compare with each other pair wise 1 v.s. 2, ...)
     |Aspects of VMMs|What is it?|e.g.|Advantages|Disadvantages|
     |---|---|---|---|---|
-    |Full virtualisation|allow an unmodified guest OS to run in isolation by simulating full hardware <br/>- Guest OS has no idea it is not on physical machine|VMWare|1. Guest is unaware it is executing within a VM<br/>2. Guest OS need not be modified<br/>3. No hardware or OS assistance required<br/>4. Can run legacy OS|1. can be less efficient|
-    |Para-virtualisation|- VMM/Hypervisor exposes special interface to guest OS for better performance. Requires a modified/hypervisor-aware Guest OS <br/> - Can optimise systems to use this interface since not all instructions need to be trapped/dealt with because "VMM emulates the effect on system/hardware resources of privileged instructions whose execution traps into the VMM"|Xen|1. Lower virtualisation overheads, so better performance|1. Need to modify guest OS - Can’t run arbitrary OS!<br/>2. Less portable<br/>3. Less compatibility<br/>
-    |Hardware-assisted virtualisation|Hardware provides architectural support for running a Hypervisor<br/>- New processors typically have this<br/>- Requires that all sensitive instructions trappable|KVM|1. Good performance<br/>2. Easier to implement<br/>3. Advanced implementation supports hardware assisted DMA, memory virtualisation|1. Needs hardware support
-    |software virtualization|Any virtualisation that does not involve hardware support.|
-    |Binary Translation|Trap and execute occurs by scanning guest instruction stream and replacing sensitive instructions with emulated code <br/> - Don’t need hardware support, but can be much harder to achieve|VMWare|1. Guest OS need not be modified<br/>2. No hardware or OS assistance required<br/>3. Can run legacy OS|1. Overheads<br/> 2. Complicated<br/> 3. Need to replace instructions “on-the-fly”<br/> 4. Library support to help this, e.g. vCUDA
+    |Full virtualisation|allow an unmodified guest OS to run in isolation by simulating full hardware <br/>- Guest OS has no idea it is not on physical machine； 模拟整个计算机系统，包括硬件， VMM 将Guest OS运行在虚拟硬件之上，Guest OS无法感知自己的是在虚拟机上运行。|VMWare|1. Guest is unaware it is executing within a VM<br/>2. Guest OS need not be modified<br/>3. No hardware or OS assistance required<br/>4. Can run legacy OS； Guest OS无需修改，直接在虚拟机运行 支持多种OS，包括不同版本 现有硬件和操作系统无需修改。|1. can be less efficient； 由于需要模拟整个硬件平台，开销较大性能和效率较低|
+    |Para-virtualisation|- VMM/Hypervisor exposes special interface to guest OS for better performance. Requires a modified/hypervisor-aware Guest OS <br/> - Can optimise systems to use this interface since not all instructions need to be trapped/dealt with because "VMM emulates the effect on system/hardware resources of privileged instructions whose execution traps into the VMM"； 为虚拟机提供一组虚拟化接口，让虚拟机 可以直接与物理硬件交互，减少虚拟机运行的开销，提高性能。|Xen|1. Lower virtualisation overheads, so better performance； 更小的虚拟机创建维护开销，更高的性能|1. Need to modify guest OS - Can’t run arbitrary OS!<br/>2. Less portable<br/>3. Less compatibility<br/>；需要修改Guest OS从而使用接口 兼容性和可移植性较差
+    |Hardware-assisted virtualisation|Hardware provides architectural support for running a Hypervisor<br/>- New processors typically have this<br/>- Requires that all sensitive instructions trappable； 使用硬件支持来增强虚拟机的性能和安全性。提供一些特殊的CPU指令使得VMM可以直接访问物理资源，通常需要CPU支持硬件虚拟化。|KVM|1. Good performance<br/>2. Easier to implement<br/>3. Advanced implementation supports hardware assisted DMA, memory virtualisation；更小的虚拟机创建维护开销，更好的隔离性和可靠性|1. Needs hardware support；硬件功能限制，部署配置较为复杂 |software virtualization|Any virtualisation that does not involve hardware support.|
+    |Binary Translation|Trap and execute occurs by scanning guest instruction stream and replacing sensitive instructions with emulated code <br/> - Don’t need hardware support, but can be much harder to achieve； 对虚拟机运行的执行进行拦截和翻译，同时进行特权指令和敏感指令的降级，变成可以在宿主机上运行的指令。|VMWare|1. Guest OS need not be modified；无需修改Guest OS<br/>2. No hardware or OS assistance required不需要硬件辅助<br/>3. Can run legacy OS<br/>4.可以使用多种操作系统版本;可以在翻译中进行优化提高性能|1. Overheads<br/> 2. Complicated翻译过程较为复杂<br/> 3. Need to replace instructions “on-the-fly”<br/> 4. Library support to help this, e.g. vCUDA<br/>5. 指令翻译带来的性能开销
     |Bare Metal Hypervisor|VMM runs directly on actual hardware<br/>- Boots up and runs on actual physical machine<br/>- VMM has to support device drivers, all HW mgt |VMWare ESX Server
     |Hosted Virtualisation|VMM runs on top of another operating system|VMWare Workstation
     |Operating System Level Virtualisation|1. Lightweight VMs<br/>2. Instead of whole-system virtualisation, the OS creates mini-containers|Docker|1. Lightweight<br/>2. Many more VMs on same hardware<br/>3. Can be used to package applications and all OS dependencies into container|1. Can only run apps designed for the same OS<br/>2. Cannot host a different guest OS<br/>3. Can only use native file systems<br/>4. Uses same resources as other containers|
@@ -1643,6 +1662,9 @@ Terminology
 - Offers free and open-source software platform for cloud computing for <u>**IaaS**</u>
 - Consists of interrelated components (services) that control / support compute, storage, and networking resources
 - Often used through web-based dashboards, through command-line tools, or programmatically through ReSTful APIs
+- OpenStack是一种开源云计算平台，可用于构建和管理私有云、公有云和混合云环境。
+- Amazon AWS(Amazon Web Services)是一种商 业云计算平台，它为企业提供了高度可扩展、 高可用性、安全和低成本的云解决方案。
+- Melbourne Research Cloud是一个由澳大利亚 墨尔本大学提供的云计算平台，旨在为研究 人员提供高性能计算和数据存储服务。它基 于OpenStack构建。
 
 ### Openstack architecture
 - <img src="./docs/33.jpg" width="60%" height="30%" />
@@ -1886,11 +1908,12 @@ Terminology
     - stateful & stateless
     - Synchronous/Asynchronous Functions
 3. What is Function as a Service (FaaS)?
-    - FaaS is also know as Serverless computing
-    - FaaS is an extreme form of microservice architecture
-    - The idea behind Serverless/FaaS is to develop software applications without bothering with the infrastructure (especially scaling-up and down as load increases or decreases). Therefore, it is more Server-unseen than Server-less
+    -FaaS与PaaS有一定相似性，但是 FaaS关注粒度在函数级别，适合 短时或无状态计算任务
+    - FaaS is also know as Serverless computing无服务器计算
+    - FaaS is an extreme form of microservice architectureFaaS是一种极端的微服务架构，将应用程序拆分成更小的、可独立 部署和扩展的函数，以满足不同的需求。
+    - The idea behind Serverless/FaaS is to develop software applications without bothering with the infrastructure (especially scaling-up and down as load increases or decreases). Therefore, it is more Server-unseen than Server-less核心理念是开发应用程序时不必关心基础架构，所以服务器看起来对用户是不可见的
     - What does it do?
-        - A FaaS service allows functions to be added, removed, updated, executed, and auto-scaled
+        - A FaaS service allows functions to be added, removed, updated, executed, and auto-scaledFaaS允许函数的添加、删除、更新、执行和自动缩放。
 4. Why we need Faas?
     |Reason|How|
     |---|---|
@@ -1908,6 +1931,8 @@ Terminology
         - Azure Functions by Microsoft
     - proprietary FaaS services v.s. open-source FaaS frameworks
         - open-source FaaS frameworks can be deployed on your cluster, peered into, disassembled, and improved by you.
+    - 1、部署简单，用户只需要编写函数的code并上传 2、计算成本低，FaaS只计费函数执行时间 3、架构松耦合，函数间相互独立，应用程序复杂性低，容易维护更新
+
 
 ### past exam
 - > [sample Q7] A) In the context of Cloud, what is meant by serverless computing? [1]
@@ -1955,11 +1980,13 @@ Terminology
 
 ## Week 9 - Big Data Analytics
 1. Why we need it?
+    - 大量数据的积累
     - There would not be much point in amassing vast amount of data without being able to analyse it, hence the blossoming of large-scale business intelligence and more complex machine learning algorithms. 
     - Overlapping among business intelligence, machine learning, statistics and data mining.
         - Just use big data analytics
 2. What is it?
     - There is a good deal of overlap and confusion among terms such as business intelligence, machine learning, statistics, and data mining. For the sake of clarity, we just use the more general term (big) data analytics
+    - 是一个很宏观的概念 分布式计算、机器学习、数据挖掘、数据聚合、聚类、情感分析、推荐系统等等
 3. Examples of Analytics
     ||
     |---|
@@ -1972,10 +1999,11 @@ Terminology
     - A framework for analysing big data has to distribute both data and processing over many nodes, which implies:
         |imply||
         |---|---|
-        |Reading and writing distributed datasets
-        |Preserving data in the presence of failing data nodes
+        |Reading and writing distributed datasets 需要分布式计算框架
+        |Preserving data in the presence of failing data nodes源数据和处理过程一般需要分布在多个节点/服务器上，
         |Supporting the execution of MapReduce tasks
-        |Being fault-tolerant|a few failing compute nodes may slow down the processing, but not stop it
+        |Being fault-tolerant容错
+        |a few failing compute nodes may slow down the processing, but not stop it
         |Coordinating the execution of tasks across a cluster
 5. Tools for Analytics:
     - Apache Hadoop
@@ -1989,6 +2017,7 @@ Terminology
 2. Hadoop Distributed File System (HDFS)
     - What is it?
         - The core of Hadoop is a fault tolerant file system that has been explicitly designed to span many nodes
+        - Hadoop的核心是一个容错的，被明确地设计为跨越多个节点的分布式文件系统 HDFS块(128MB)远远大于普通文件系统使用的块(4KB)，用于减小存储块位置信息所需的内存，有效地利用网络，减少网络连接数，减少大文件寻址操作，并利用局部性原理，提高数据处理效率。
     - HDFS blocks v.s. blocks
         - HDFS blocks are much larger than blocks used by an ordinary file system (say, 4 KB versus 128MB)
         - Why?
@@ -1999,6 +2028,7 @@ Terminology
             |Reduced need for seek operations on big files
             |Efficient when most data of a block have to be processed
     - HDFS Architecture
+        - <img src="./docs/42.png" width="60%" height="50%" />
         - A HDFS file is a collection of blocks stored in datanodes, with metadata (such as the position of those blocks) that is stored in namenodes
         - <img src="./docs/23.png" width="60%" height="50%" />
         - 有namenode和datanode，namenode只存每个block具体在哪个datanode上，datanode具体存各个block
@@ -2006,25 +2036,27 @@ Terminology
         - Why we need it?
             - Managing the files on a HDFS cluster cannot be done on the operating system shell
                 - hence a custom HDFS shell must be used.
-        - The HDFS file system shell replicates many of the usual commands (ls, rm, etc.), with some other commands dedicated to loading files from the operating system to the cluster (and back)
+                - 在HDFS集群中管理文件不能使用OS 的Shell，因此只能使用自定义的 HDFS Shell
+        - The HDFS file system shell replicates many of the usual commands (ls, rm, etc.), with some other commands dedicated to loading files from the operating system to the cluster (and back)HDFS文件系统包含了许多通常的命令，还有一些命令专门用于处理文件在操作系统和集群中的转移。
 3. The Hadoop Resource Manager (YARN)
     - What is it/What does it do?
+        -YARN负责在集群上执行MapReduce作业，主要功能是资源管理和任务调度，它由一个中央资源管理器(位于主节点)和许多节点管理器组成(位于从节点)
         - YARN deals with Executing MapReduce jobs on a cluster
             - It is composed of a central ***Resource Manager*** and
             - Many ***Node Managers*** that reside on slave machines
-    - Every time a MapReduce job is scheduled for execution on a Hadoop cluster, YARN starts an **<u>Application Master</u>** that negotiates resources with the **<u>Resource Manager</u>** and starts Containers on the slave nodes
+    - Every time a MapReduce job is scheduled for execution on a Hadoop cluster, YARN starts an **<u>Application Master</u>** that negotiates resources with the **<u>Resource Manager</u>** and starts Containers on the slave nodes; 每当Hadoop集群上分配了MapReduce作业时，YARN负责与资源管理器协商资源，并从节点上启动任务进程
         - Containers are the processes where the actual processing is done
 5. Programming on Hadoop
 ### Apache Spark
 1. Why Spark not Hadoop?/Spark v.s. Hadoop
-    - While Hadoop MapReduce works well, it is geared towards performing relatively simple jobs on large datasets.
+    - While Hadoop MapReduce works well, it is geared towards performing relatively simple jobs on large datasets. - Hadoop MapReduce适用于大型数据集的执行这类简单任务
         - While the execution order of Hadoop MapReduce is fixed, the lazy evaluation of Spark allows the developer to stop worrying about it, and have the Spark optimizer take care of it. 
         - In addition, the driver program can be divided into steps that are easier to understand without sacrificing performance (as long as those steps are composed of transformations).
     - However, when complex jobs are performed, we would like
-        - Caching data in memory
-        - Having finer-grained control on the execution of the jobs
+        - Caching data in memory 当执行复杂任务时，有时需要将数据缓存在内存中
+        - Having finer-grained control on the execution of the jobs 此时需要对作业的执行有更细粒度的控制
     - Spark was designed to 
-        - reduce the latency inherent in the Hadoop approach for the execution of MapReduce job
+        - reduce the latency inherent in the Hadoop approach for the execution of MapReduce job; Apache Spark旨在降低MapReduce作业的延迟，并提供更复杂且强大的编程环境。
         - How?
             - The transformations in the program use lazy evaluation, hence Spark has the possibility of optimizing the process
     - Spark can operate within the Hadoop architecture, using YARN and Zookeeper to 
@@ -2045,9 +2077,11 @@ Terminology
 5. Spark Runtime Architecture
     - Applications in Spark are composed of different components including
       - Job
+        - 对数据集进行的数据处理操作
         - The data processing that has to be performed on a dataset
         - the overall processing that Spark is directed to perform by a driver program
       - Task
+        - 对数据集的单个操作(一个 job 可以有多个 tasks)
         - A single operation on a dataset
         - a single transformation operating on a single partition of data on a single node
       - Stage
@@ -2057,14 +2091,18 @@ Terminology
       - Stage \& Job
         - A job is composed of more than one stage when data are to be transferred across node
       - Executors
+        - 执行Task的进程
         - The processes in which tasks are executed
       - Cluster Manager
+        - 负责将Task分配给 Executors 的进程
         - The process assigning tasks to executors
       - Driver program
+        - 应用程序的主要逻辑
         - The main logic of the application
       - Spark application
         - Driver program + Executor
       - Spark Context
+        - Job的配置信息
         - The general configuration of the job
             - The **deployment is set in the Stpark Context**, which is also used to set the configuration of a Spark application, including the cluster it connects to in cluster mode.
                 -  For instance, this hard-coded Spark Context directs the execution to run locally, using 2 threads (usually, it is set to the number of cores): 
@@ -2072,18 +2110,18 @@ Terminology
                 - This other hard-coded line directs the execution to a remote cluster:
                     - sc = new SparkContext(new SparkConf().setMaster("spark://192.168.1.12:6066"));
             - Spark Contexts can also be used to **tune the execution** by setting the memory, or the number of executors to use.  
-    - These different components can be arranged in **<u>three</u>** different deployment modes (below) across the cluster
+    - These different components can be arranged in **<u>three</u>** different deployment modes (below) across the cluster这些不同的组件可以按照三种不同的部署模式在集群上安排:
     - Spark Runtime Mode
         - Local Mode
-            - In local mode, every Spark component runs within the same JVM. However, the Spark application can still run in parallel, as there may be more than on executor active
+            - In local mode, every Spark component runs within the same JVM. However, the Spark application can still run in parallel, as there may be more than on executor active组件在相同JVM中运行，适合开发和测试
             - When used?
                 - Good for developing and debugging
         - Cluster Mode
-            - In cluster mode, every component, including the driver program, is executed on the cluster. Upon launching, the job can run autonomously. 
+            - In cluster mode, every component, including the driver program, is executed on the cluster. Upon launching, the job can run autonomously. 用于交互式应用程序，运行Driver程序的节点必须持续连接到集群
             - When used?
                 - This is the common way of running non-interactive Spark jobs.
         - Client Mode
-            - The driver program talks directly to the executors on the worker nodes. Therefore, the machine hosting the driver program has to be connected to the cluster until job completion.
+            - The driver program talks directly to the executors on the worker nodes. Therefore, the machine hosting the driver program has to be connected to the cluster until job completion.用于非交互式应用程序，Driver程序运行在由YARN管理的master节点中
             - When used? 
                 - Client mode must be used when the applications are interactive, as happens in the Python or Scala Spark shells.
 5. Caching Intermediate Results
@@ -2096,19 +2134,20 @@ Terminology
                 - only rddB has been written to disk.
 6. Resilient Distributed Dataset (RDDs) (Central to Spark)
     - What is it?
+        - RDD 是Spark计算过程中存储数据的方式
         - the way data are stored in Spark during computation, and understanding them is crucial to writing programs in Spark:
             ||What?|
             |---|---|
-            |Resilient|data partitions can be reconstructed from previous operations, hence a failing node would not affect their integrity
-            |Distributed|data are split into chunks, and these chunks are sent to different nodes
-            |Dataset|a dataset is just a collection of objects, hence very generic
+            |Resilient|data partitions can be reconstructed from previous operations, hence a failing node would not affect their integrity数据分区可以被重建; 节点失败不影响数据完整性
+            |Distributed|data are split into chunks, and these chunks are sent to different nodes数据被分成块并发送到不同的节点
+            |Dataset|a dataset is just a collection of objects, hence very generic对象的集合
     - Properties of RDDs
         - RDDs are
             |Property||benefit
             |---|---|---|
-            |immutable|once defined, they cannot be changed|simplifies parallel computations on them, and <br/>is consistent with the functional programming paradigm
-            |transient|they are meant to be used only once, then discarded (but they can be cached, if it improves performance)|
-            |lazily-evaluated|the evaluation process happens only <br/> - when data cannot be kept in an RDD, as when the number of objects in an RDD has to be computed, <br/> - or an RDD has to be written to a file (these are called actions), but <br/> - not when an RDD are transformed into another RDD (these are called transformations)|optimizing the process
+            |immutable - RDD是不可变的|once defined, they cannot be changed意味着RDD一旦定义便不能更改，但是可以对RDD进行操 作和转换来创建新的RDD|simplifies parallel computations on them, and <br/>is consistent with the functional programming paradigm易于并行处理，高容错
+            |transient瞬时的|they are meant to be used only once, then discarded (but they can be cached, if it improves performance)只能被使用一次然后丢弃，易于缓存和处理大量数据|
+            |lazily-evaluated惰性求值|the evaluation process happens only - 由执行操作触发，例如写入文件系统时，而不是发生转换时完成求值 <br/> - when data cannot be kept in an RDD, as when the number of objects in an RDD has to be computed, <br/> - or an RDD has to be written to a file (these are called actions), but <br/> - not when an RDD are transformed into another RDD (these are called transformations)|optimizing the process优化执行顺序，提高执行效率，避免计算冗余
             - The transformations in the program use lazy evaluation, hence Spark has the possibility of optimizing the process
     - How to Build an RDD?
         - usually created out of data stored elsewhere (HDFS, a local text file, a DBMS)
@@ -2281,17 +2320,26 @@ Terminology
                         - Only several attributes used to federation authentication access control
     - Public Key Infrastructures (PKI) underpins MANY systems
         - What is it?
+            - 公钥基础设施基于公钥加密(Public Key Cryptography) 也称为非对称加密，使用公钥和私钥，类似单向函数，以哈希为例，很难从F和y反推x
+            - 公钥(Public Key):公开的，可以用来加密数据
+            - 私钥(Private Key):仅密钥拥有者知道，用于解密数据，也可以用于数字签名 公钥私钥应该在内容上无关
             - an arrangement that binds public key with respective identities of entities(like people and organization). 
             - The binding is established through a process of registration and issurance of certificates at and by a certificate authority 
-            - The PKI role that assures valid and correct registration is called a registration authority(RA). RA is responsible for accepting requests for digital certificates and authenticating the entity making the reques
+            - The PKI role that assures valid and correct registration is called a registration authority(RA). RA is responsible for accepting requests for digital certificates and authenticating the entity making the request
+        - 优势
+            - 避免对密钥的传输，使得密钥管理更加容易和安全 
+            - 只需要知道对方的公钥即可加密，需要保存好的只有自己的私钥 
+            - 而对称加密中，需要保存好所有人的私钥
         - Based on public key cryptography
         - Public Key Cryptography
             - Also called Asymmetric Cryptography
                 - Two distinct keys
                     - One that must be kept private
                         - Private Key
+                        - 私钥(Private Key):仅密钥拥有者知道，用于解密数据，也可以用于数字签名 公钥私钥应该在内容上无关
                     - One that can be made public
                         - Public Key
+                        - 公钥(Public Key):公开的，可以用来加密数据
                 - Two keys complementary, but essential that cannot find out value of private key from public key
                     - With private keys can digitally sign messages, documents and validate them with associated public keys
                         - Check whether changed, useful for non-repudiation
@@ -2302,6 +2350,9 @@ Terminology
                         - Public Keys can be freely distributed
                     - Only Private Key needs to be kept long term and kept securely
         - PKI and Cloud
+            - MRC(IaaS)中使用Key-Pair确保安全访问，创建instance时应用公钥私钥 由于云服务提供商来自不同的地区，使用不同的安全标准和认证机制，因此并没有单 一的、普遍存在的CA机构。这意味着，云计算用户需要使用不同的认证方式来证明自 己的身份，并获得访问云资源的权限。
+            - MRC VM是需要通过证明是University of Melbourne的成员
+            - SPARTAN cluster需要证明是University of Melbourne的成员且enroll了COMP90024
             - So what has this got to do with Cloud…?
                 - IaaS – key pair!
             - Cloud interoperability begins with security!
@@ -2312,6 +2363,7 @@ Terminology
                 - But remember need for single sign-on
                 - Prove identity once and access distributed, autonomous resources!
         - Public Key Certificates
+            - 使用非对称加密时，倘若出现中间人使用自己的密钥对伪装成A和B，导致安全性问题 -> Public Key Certificates用于标识公钥和拥有其私钥的用户，类似于名片
             - (PKC & PKI) Mechanism connecting public key to user with corresponding private key is Public Key Certificate 
                 - Public key certificate contains public key and identifies the user with the corresponding private key
                     - Distinguished Name (DN): CN=Richard Sinnott; OU=Dept CIS; O=UniMelb; C=AU
@@ -2326,11 +2378,13 @@ Terminology
         - Certification Authority
             - What it it?
                 - <u>**Central component of PKI is Certification Authority (CA)**</u>
+                - 为了确认公钥证书的真实性，需要受信任的证书颁发机构，即Certification Authority， 是PKI的核心组成部分，负责颁发和管理数字证书
             - CA has numerous responsibilities 
                 - <u>**Policy and procedures**</u>
                     - How to’s, do’s and don’ts of using certificates 
                     - Processes that should be followed by users, organisations, service providers …(and consequence for violating them!)
             - challenge: 
+                - CA并非绝对安全，但是更难被攻击和伪造，成本和维护复杂性高
                 - Issuing certificates
                     - Often need to delegate to local Registration Authority
                     - Prove who you are, e.g. with passport, student card
@@ -2345,6 +2399,24 @@ Terminology
                 - Typical scenario for getting a certificate
                 - steps:
                 - <img src="./docs/27.jpg" width="60%" height="50%" />
+            - 过程
+                - 1、制定有关数字证书的使用规定，操作流程，使用标准 
+                - 2、发行证书，进行公钥和其他信息的绑定，对证书签名 
+                - 3、吊销证书，当数字证书过期或被盗用时，进行吊销 
+                - 4、存储归档，对已经颁发的数字证书进行记录管理，以便后续使用 
+                - 5、保证证书安全性，避免恶意攻击、数据泄露等安全问题
+- Cloud Security Challenge
+    - Single Sign-on 单点登录控制 包括身份验证和令牌传递，提高用户的使用效率和体验
+    - Auditing 审计过程 包括记录日志、入侵检测和安全审计，进行安全性监测和评估
+    - Deletion & Encryption 数据的删除和加密 受数据位置、规模影响，删除操作可能消耗大量时间资源 密钥的丢失和泄露可能造成数据不可访问
+    - Liability 责任和义务的确定 云提供商需要承担保护用户数据的责任，并提供安全的各项服务
+    - Licensing 许可证的管理 云服务的弹性和扩展性会导致许可证的增减，引起过度使用或不足使用
+    - Workflows 工作流控制 使用适当的安全策略和技术措施确保工作流程的高效执行
+    - The Ever Changing Technical/Legal Landscape 技术与法律的变化
+
+- Authentication & Authorization
+    - Authentication是验证用户身份的过程，而不对用户操作进行检查 
+    - Authorization是基于身份验证的授权过程，对用户的操作进行权限判断，控制资源访问
 - Authorisation
     - What is it?
         - Authorisation is concerned with controlling access to resources based on policy 
@@ -2398,6 +2470,9 @@ Terminology
     - Reflect needs and understanding of organisations involved!
     - Identity Provider
         - The place you got authenticated
+    
+
+
 
 ### past exam
 - > [2013 Q6] A) Explain what is meant by the following security terms:
